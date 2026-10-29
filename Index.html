@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Question 💘</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", sans-serif;
+      background: linear-gradient(135deg, #FFD6E7, #FFB6D5, #FFE5F0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #C2185B;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      animation: floatUp 8s linear infinite;
+      opacity: 0.65;
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-115vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      width: min(90%, 480px);
+      min-height: 390px;
+      padding: 35px 22px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.8);
+      border: 2px solid white;
+      border-radius: 30px;
+      box-shadow: 0 15px 45px #d94b8050;
+    }
+
+    .main-heart {
+      font-size: 65px;
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      50% { transform: scale(1.15); }
+    }
+
+    h1 {
+      font-size: clamp(26px, 6vw, 36px);
+      margin: 15px 0;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    .buttons {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      min-height: 100px;
+      margin-top: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 14px 27px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 12px #d94b8030;
+    }
+
+    #yesBtn {
+      background: #FF4F91;
+      color: white;
+    }
+
+    #noBtn {
+      background: #fff;
+      color: #E34B83;
+      border: 2px solid #FFB5D0;
+      position: absolute;
+      left: 58%;
+      transition: left 0.15s, top 0.15s;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.08);
+    }
+
+    #success {
+      display: none;
+    }
+
+    .dudu {
+  display: block;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin: 15px auto;
+}
+
+    @keyframes dance {
+      from { transform: rotate(-12deg) translateY(0); }
+      to { transform: rotate(12deg) translateY(-12px); }
+    }
+
+    .small {
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="card" id="question">
+    <div class="main-heart">💘</div>
+
+    <h1>Do You Love Me? 🥹</h1>
+    <p>I have a little question for you, cutie! 🌸</p>
+
+    <div class="buttons">
+      <button id="yesBtn">YES 💖</button>
+      <button id="noBtn">NO 🙈</button>
+    </div>
+
+    <p class="small">Choose carefully, my love! 💕</p>
+  </main>
+
+  <main class="card" id="success">
+    <div class="main-heart">💘</div>
+    <h1>Ayeee! I Knew It! 😭💘</h1>
+
+    <img
+  class="dudu"
+  src="dudu-bubu.gif"
+  alt="Dudu and Bubu"
+/>
+
+    <h2>Love You Too, Baby! 🥹</h2>
+    <p>You just made me the happiest person ever! 💞</p>
+    <p>Forever my favourite person. 💋</p>
+  </main>
+
+  <script>
+    const hearts = document.getElementById("hearts");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const question = document.getElementById("question");
+    const success = document.getElementById("success");
+
+    // Floating hearts in the background
+    for (let i = 0; i < 25; i++) {
+      const heart = document.createElement("span");
+      heart.className = "heart";
+      heart.textContent = ["💘", "💕", "💖", "💘"][i % 4];
+      heart.style.left = Math.random() * 100 + "%";
+      heart.style.animationDelay = Math.random() * 8 + "s";
+      heart.style.animationDuration = (5 + Math.random() * 6) + "s";
+      heart.style.fontSize = (16 + Math.random() * 25) + "px";
+      hearts.appendChild(heart);
+    }
+
+    // The NO button escapes when clicked or approached
+    function moveNoButton() {
+      const card = question.getBoundingClientRect();
+      const button = noBtn.getBoundingClientRect();
+
+      const maxX = Math.max(0, card.width - button.width - 25);
+      const maxY = Math.max(0, card.height - button.height - 25);
+
+      noBtn.style.left = (10 + Math.random() * Math.max(0, maxX - 10)) + "px";
+      noBtn.style.top = (Math.random() * maxY) + "px";
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    noBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      moveNoButton();
+    });
+
+    // YES opens the surprise screen
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      success.style.display = "block";
+
+      // Celebration hearts
+      for (let i = 0; i < 35; i++) {
+        const heart = document.createElement("span");
+        heart.className = "heart";
+        heart.textContent = ["💘", "💖", "💘", "✨"][i % 4];
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.animationDelay = Math.random() * 3 + "s";
+        heart.style.fontSize = (18 + Math.random() * 24) + "px";
+        hearts.appendChild(heart);
+      }
+    });
+  </script>
+</body>
+</html>
